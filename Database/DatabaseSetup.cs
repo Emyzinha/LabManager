@@ -14,17 +14,17 @@ class DatabaseSetup
 
     public void CreateCommputerTable()
     {
-        var conection = new SqliteConnection("Data Source=database.db");
+        var conection = new SqliteConnection(databaseConfig.ConnectionString);
 
         conection.Open();
 
         var command = conection.CreateCommand();
         command.CommandText = @";
 
-        C  REATE TABLE IF NOT EXISTS Computers(
-        id int not null primary key,
-        ram varchar(100) not null,
-        processor varchar(100) not null
+        CREATE TABLE IF NOT EXISTS Computers(
+            id int not null primary key,
+            ram varchar(100) not null,
+            processor varchar(100) not null
         );
         ";
 

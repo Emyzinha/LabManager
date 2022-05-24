@@ -16,10 +16,10 @@ class ComputerRepository{
 
     public List<Computer>GetAll()
     {
-        var conection = new SqliteConnection("Data Source=database.db");
+        var conection = new SqliteConnection(databaseConfig.ConnectionString);
         conection.Open();
          var command = conection.CreateCommand();
-        command.CommandText = "SELECT *FROM Computers";
+        command.CommandText = "SELECT * FROM Computers";
        
        var reader = command.ExecuteReader();
 
@@ -38,4 +38,21 @@ class ComputerRepository{
 
     }
     
+    public void Save (Computer computer)
+    {
+     var conection = new SqliteConnection(databaseConfig.ConnectionString);
+   
+    conection.Open();
+        
+
+    var command = conection.CreateCommand();
+    command.CommandText = "INSERT INTO Computers VALUES($id, $ram, $processor)";
+    command.Parameters.AddWithValue( "$id", computer.Id);
+    command.Parameters.AddWithValue( "$ram", computer.Ram);
+    command.Parameters.AddWithValue( "$processor", computer.Procesador);
+
+    command.ExecuteNonQuery();
+    conection.Close();
+
+    }
 }

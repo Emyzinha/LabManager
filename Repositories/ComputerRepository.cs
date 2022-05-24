@@ -38,7 +38,7 @@ class ComputerRepository{
 
     }
     
-    public void Save (Computer computer)
+    public Computer Save (Computer computer)
     {
      var conection = new SqliteConnection(databaseConfig.ConnectionString);
    
@@ -53,6 +53,8 @@ class ComputerRepository{
 
     command.ExecuteNonQuery();
     conection.Close();
+
+    return computer;
 
     }
 }

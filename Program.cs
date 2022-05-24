@@ -8,6 +8,7 @@ var databaseConfig = new DatabaseConfig();
 new DatabaseSetup(databaseConfig);
 
 var computerRepository = new ComputerRepository(databaseConfig);
+var labRepository = new LabRepository(databaseConfig);
 
 //Routing - rotiamente 
 
@@ -34,10 +35,25 @@ if(modelName =="Computer"){
         var computer = new Computer(id, ram, processor);
         computerRepository.Save(computer);
 
-       
-
-
 
     }
-}
 
+
+if (modelName=="Lab")
+{
+    if(modelAction == "List")
+    {
+                Console.WriteLine("Lab list");
+        foreach(var lab in labRepository.GetAll())
+        {
+            var message = $"{lab.Id}, {lab.Number}, {lab.Name}, {lab.Block}";
+            Console.WriteLine(message);
+    }
+
+    if(modelAction == "New")
+    {
+
+    }
+    }
+}
+}

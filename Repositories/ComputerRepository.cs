@@ -16,9 +16,9 @@ class ComputerRepository{
 
     public List<Computer>GetAll()
     {
-        var conection = new SqliteConnection(databaseConfig.ConnectionString);
-        conection.Open();
-         var command = conection.CreateCommand();
+        var connection = new SqliteConnection(databaseConfig.ConnectionString);
+        connection.Open();
+         var command = connection.CreateCommand();
         command.CommandText = "SELECT * FROM Computers";
        
        var reader = command.ExecuteReader();
@@ -32,7 +32,7 @@ class ComputerRepository{
               
        }
 
-       conection.Close();
+       connection.Close();
 
        return computers;
 
@@ -40,21 +40,26 @@ class ComputerRepository{
     
     public Computer Save (Computer computer)
     {
-     var conection = new SqliteConnection(databaseConfig.ConnectionString);
+     var connection = new SqliteConnection(databaseConfig.ConnectionString);
    
-    conection.Open();
+    connection.Open();
         
 
-    var command = conection.CreateCommand();
+    var command = connection.CreateCommand();
     command.CommandText = "INSERT INTO Computers VALUES($id, $ram, $processor)";
     command.Parameters.AddWithValue( "$id", computer.Id);
     command.Parameters.AddWithValue( "$ram", computer.Ram);
     command.Parameters.AddWithValue( "$processor", computer.Procesador);
 
     command.ExecuteNonQuery();
-    conection.Close();
+    connection.Close();
 
     return computer;
 
     }
+
+
+
 }
+
+//sql puro 

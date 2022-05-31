@@ -18,7 +18,7 @@ class ComputerRepository{
     {
         var conection = new SqliteConnection(databaseConfig.ConnectionString);
         conection.Open();
-         var command = conection.CreateCommand();
+        var command = conection.CreateCommand();
         command.CommandText = "SELECT * FROM Computers";
        
        var reader = command.ExecuteReader();
@@ -40,7 +40,7 @@ class ComputerRepository{
     
     public Computer Save (Computer computer)
     {
-     var conection = new SqliteConnection(databaseConfig.ConnectionString);
+    var conection = new SqliteConnection(databaseConfig.ConnectionString);
    
     conection.Open();
         
@@ -57,4 +57,59 @@ class ComputerRepository{
     return computer;
 
     }
+
+
+    public Computer GetById(int id)
+    {
+    using var conection = new SqliteConnection(databaseConfig.ConnectionString);
+
+    conection.Open();    
+    var command = conection.CreateCommand();
+
+    command.CommandText = "SELECT id, ram, processor from computers WHERE id = $id";
+    command.Parameters.AddWithValue("$id", id);
+
+    var reader = command.ExecuteReader();
+    reader.Read();
+
+    var computer = new Computer(reader.GetInt32(0), reader.GetString(1), reader.GetString(2));
+
+    conection.Close();
+    return computer;
+    }
+
+    public Computer Update(Computer computer)
+    {
+    using var conection = new SqliteConnection(databaseConfig.ConnectionString);
+
+    conection.Open();
+    var command = conection.CreateCommand();
+
+    command.CommandText= "UPDATE Computer SET id = $id, ram = $ram, processsor = $processor WHERE id = %id";
+    command.Parameters.AddWithValue( "$id", computer.Id);
+    command.Parameters.AddWithValue( "$ram", computer.Ram);
+    command.Parameters.AddWithValue( "$processor", computer.Procesador);
+
+    command.ExecuteNonQuery();
+    conection.Close();
+
+    return computer;
+
+    }
+
+    void Delete(int id)
+    {
+   using var conection = new SqliteConnection(databaseConfig.ConnectionString);
+    conection.Open();
+
+    var command = conection.CreateCommand();      
+
+    command.CommandText = "DELETE FROM Computers WHERE id = $id";
+    command.Parameters.AddWithValue("$id", id);
+    command.ExecuteNonQuery();
+   
+    conection.Close();
+    }
+
+    
 }

@@ -23,12 +23,14 @@ class ComputerRepository{
        
        var reader = command.ExecuteReader();
 
+
        var computers = new List<Computer>();
 
        while(reader.Read())
        {
          
-     computers.Add(new Computer(reader.GetInt32(0), reader.GetString(1), reader.GetString(2)));
+      var computer = readerToComputer(reader);
+      computers.Add(computer);
               
        }
 
@@ -61,16 +63,16 @@ class ComputerRepository{
 
     public Computer GetById(int id)
     {
-    using var conection = new SqliteConnection(databaseConfig.ConnectionString);
+   var conection = new SqliteConnection(databaseConfig.ConnectionString);
 
     conection.Open();    
     var command = conection.CreateCommand();
 
-    command.CommandText = "SELECT id, ram, processor from computers WHERE id = $id";
+    command.CommandText = "SELECT * FROM computers WHERE id = $id";
     command.Parameters.AddWithValue("$id", id);
 
     var reader = command.ExecuteReader();
-    reader.Read();
+    reader.Read(); // quer uma linha 
 
     var computer = new Computer(reader.GetInt32(0), reader.GetString(1), reader.GetString(2));
 
@@ -85,7 +87,7 @@ class ComputerRepository{
     conection.Open();
     var command = conection.CreateCommand();
 
-    command.CommandText= "UPDATE Computer SET id = $id, ram = $ram, processsor = $processor WHERE id = %id";
+    command.CommandText= "UPDATE Computer SET ram = $ram, processsor = $processor WHERE id = %id";
     command.Parameters.AddWithValue( "$id", computer.Id);
     command.Parameters.AddWithValue( "$ram", computer.Ram);
     command.Parameters.AddWithValue( "$processor", computer.Procesador);
@@ -111,5 +113,15 @@ class ComputerRepository{
     conection.Close();
     }
 
-    
+    public bool existsById(int id )
+    {
+        return false;
+    }
+
+    private Computer readerToComputer(SqliteDataReader reader)
+    {
+        return new Computer(
+            reader.GetInt32(0),reader.GetString(1), reader.GetString(2)
+        );
+    }
 }

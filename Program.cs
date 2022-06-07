@@ -1,4 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
+// dotnet restore
 using Microsoft.Data.Sqlite;
 using LabManager.Database;
 using LabManager.Repositories;
@@ -33,10 +34,23 @@ if(modelName =="Computer"){
 
         var computer = new Computer(id, ram, processor);
         computerRepository.Save(computer);
+    }
+    if(modelAction == "Show"){
+        if (computerRepository.existsById(id))
+        {
+        var id = Convert.ToInt32(args[2]);
+        var computer = new ComputerRepository.GetById(id);
+        Console.WriteLine("{0}, {1}, {3} ",computer.id, computer.ram, computer.processor);
+        }else{
+            Console.WriteLine("&Computador com id {id} nâo existe");
+        }
 
-       
+    }
 
-
+    if(ExecuteNonQuery == "Delete"){
+        int id = Convert.ToInt32(args[2]);
+        string ram = args [3];
+        string processor = args [4];
 
     }
 }
